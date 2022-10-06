@@ -1,55 +1,37 @@
 import { Container, Box, Typography, TextField, Button } from "@mui/material";
 import { useEffect, useState } from "react";
 import useUser from "../hooks/useUser";
-import { GET_CLIENTES } from "../services/api";
-import { useQuery } from "@apollo/client";
+import { useLazyQuery, useQuery } from "@apollo/client";
+import { LOGIN } from "../services/api";
+import {
+  buttonStyle,
+  containerStyle,
+  gridItemStyle,
+  gridStyle,
+} from "../styles/styles";
 
 export const Login = () => {
+  const { login, isLogged } = useUser();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [submited, setSubmited] = useState(false);
-  // const [, navigate] = useLocation();
-  const { login, isLogged } = useUser();
-  const { data, error, loading } = useQuery(LOGIN);
 
-  useEffect(() => {
-    if (isLogged) navigate("/home");
-  }, [isLogged]);
+  //const { data, loading, error } = useQuery(GET_CLIENTES);
 
   const handleSubmit = (e) => {
-    console.log(data);
     e.preventDefault();
     login(email, password);
     setSubmited(true);
+    if (isLogged) {
+      window.location.href = "/home";
+    }
   };
 
   return (
-    <Container
-      component="main"
-      maxWidth="xs"
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        backgroundColor: "primary.main",
-        padding: "2rem",
-        borderRadius: "1rem",
-      }}
-    >
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-        }}
-      >
-        <Box
-          sx={{
-            display: "flex",
-          }}
-        ></Box>
-        <Typography sx={{ color: "secondary.main", py: 4 }}>
+    <Container component="main" maxWidth="xs" sx={containerStyle}>
+      <Box sx={containerStyle}>
+        <Box sx={gridItemStyle}></Box>
+        <Typography sx={{ color: "primary.main", py: 4 }}>
           Iniciar sesión
         </Typography>
         <form onSubmit={handleSubmit} noValidate autoComplete="off">
@@ -60,9 +42,6 @@ export const Login = () => {
           >
             <TextField
               fullWidth
-              color="primary"
-              margin="normal"
-              variant="outlined"
               label="Email"
               name="email"
               onChange={(e) => {
@@ -74,14 +53,13 @@ export const Login = () => {
             ></TextField>
             <TextField
               fullWidth
-              color="primary"
-              margin="normal"
-              variant="outlined"
               label="Password"
+              margin="normal"
               name="password"
+              type="password"
               onChange={(e) => {
                 setPassword(e.target.value);
-                setSubmited(false);
+                // setSubmited(false);
               }}
               error={submited && password === ""}
               helperText={
@@ -96,10 +74,8 @@ export const Login = () => {
             fullWidth
             color="primary"
             variant="contained"
-            sx={{
-              color: "secondary.main",
-              backgroundColor: "primary.main",
-            }}
+            sx={buttonStyle}
+            onClick={handleSubmit}
           >
             Ingresar
           </Button>

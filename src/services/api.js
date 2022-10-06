@@ -1,12 +1,10 @@
 import { gql } from "@apollo/client";
 
-export const url = "http://localhost:3000/graphql";
+export const url = "http://192.168.0.1:3000/graphql";
 
 export const LOGIN = gql`
-  mutation login($email: String!, $password: String!) {
-    login(email: $email, password: $password) {
-      token
-    }
+  query Query($password: String!, $email: String!) {
+    login(password: $password, email: $email)
   }
 `;
 // Query to get user data
@@ -21,8 +19,40 @@ export const GET_USER = gql`
 `;
 
 export const GET_CLIENTES = gql`
-  query {
+  query getClientes {
     getClientes {
+      id
+      llegada
+      salida
+      ingresaCola
+      salidaCola
+      comienzaAtencion
+      terminaAtencion
+      createdAt
+      updatedAt
+    }
+  }
+`;
+
+export const CREATE_CLIENTE = gql`
+  mutation CreateCliente($tiempo: String!) {
+    createCliente(tiempo: $tiempo) {
+      id
+      llegada
+      salida
+      ingresaCola
+      salidaCola
+      comienzaAtencion
+      terminaAtencion
+      createdAt
+      updatedAt
+    }
+  }
+`;
+
+export const UPDATE_CLIENTE = gql`
+  mutation UpdateCliente($cliente: ClienteUpdate!, $updateClienteId: Float!) {
+    updateCliente(cliente: $cliente, id: $updateClienteId) {
       id
       llegada
       salida
